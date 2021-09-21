@@ -1,0 +1,17 @@
+<mat-toolbar>
+  <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
+    <mat-icon>playlist_add_check</mat-icon>
+  </button>
+  <span>Todo List</span>
+  <span class="example-spacer"></span>
+  <p>{{getUsername()}}</p>
+  <button
+    mat-icon-button
+    class="example-icon"
+    (click)="logout()"
+    style="margin-left: 15px"
+    matTooltip="Logout"
+  >
+    <mat-icon>logout</mat-icon>
+  </button>
+</mat-toolbar>

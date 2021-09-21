@@ -1,0 +1,26 @@
+<h1 mat-dialog-title>Update Due date & Time</h1>
+<hr>
+<p>Old Due Date & Time :<br> {{getDueDate(dueDate)}}</p>
+<hr>
+<form class="example-form" [formGroup]="updateDueDateForm" (ngSubmit)="update()" >
+  <mat-form-field class="form-field" appearance="fill" style="width: 400px">
+    <mat-label>New Due Date & Time</mat-label>
+    <input
+      required matInput
+      type="datetime-local"
+      min="2021-09-19T16:01:37.077Z"
+      max="2021-09-20T16:01:37.077Z"
+      formControlName="newDueDate"
+      min="{{dateTimeNow}}"
+    > <!-- [(ngModel)]="dueDate" [defaultValue]="dueDate" -->
+    <mat-error *ngIf="updateDueDateForm.controls.newDueDate.hasError('required')">
+      Due Date and Time is <strong>required</strong>
+    </mat-error>
+  </mat-form-field>
+
+  <div>
+    <button type="submit"  mat-raised-button color="primary" style="margin-left: 5px" [disabled]="updateDueDateForm.invalid">
+      <mat-icon>restore</mat-icon> Update
+    </button>
+  </div>
+</form>

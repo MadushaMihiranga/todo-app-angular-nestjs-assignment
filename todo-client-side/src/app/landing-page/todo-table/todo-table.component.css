@@ -1,0 +1,42 @@
+.full-width-table {
+  width: 100%;
+}
+
+.StatusPending{
+  color: #7c83fd!important;
+}
+
+.StatusPostponed{
+  color: #ffb319!important;
+}
+
+.StatusCancelled{
+  color: #ff5c58!important;
+}
+
+.StatusCompleted{
+  color: #80ed99!important;
+}
+
+.pill{
+  border: 2px solid;
+  border-radius: 30px;
+  text-align: center;
+  width: 80px;/*fit-content;*/
+  padding: 2px 10px;
+}
+
+.Personal{
+  border-color: #1db9c3;
+  background-color: rgba(29, 185, 195, 0.2) /*rgba(128, 237, 153, 0.2);*/
+}
+
+.Study{
+  border-color: #96baff;
+  background-color: rgba(150, 186, 255, 0.2)
+}
+
+.Work{
+  border-color: #eca3f5;
+  background-color: rgba(236, 163, 245, 0.2)
+}

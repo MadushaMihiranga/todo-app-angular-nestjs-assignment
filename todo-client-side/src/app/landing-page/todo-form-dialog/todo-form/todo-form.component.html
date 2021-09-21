@@ -1,0 +1,53 @@
+<h1 mat-dialog-title>Create New Task.</h1>
+<hr>
+
+<form class="example-form" [formGroup]="todoForm" (ngSubmit)="submit()" >
+
+  <mat-form-field class="form-field" appearance="fill">
+    <mat-label>Title</mat-label>
+    <input matInput required  formControlName="title" maxlength="25">
+    <mat-hint align="end">{{todoForm.controls.title.value.length}} / 25</mat-hint>
+    <mat-error *ngIf="todoForm.controls.title.hasError('required')">
+      Title is <strong>required</strong>
+    </mat-error>
+    <mat-error *ngIf="todoForm.controls.title.hasError('maxlength')">
+      Title is <strong>required</strong>
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field class="form-field" appearance="fill">
+    <mat-label>Description</mat-label>
+    <textarea matInput  formControlName="description" maxlength="75"></textarea>
+    <mat-hint align="end">{{todoForm.controls.description.value.length}} / 75</mat-hint>
+    <mat-error *ngIf="todoForm.controls.description.hasError('maxlength')">
+      Title is <strong>required</strong>
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field class="form-field" appearance="fill">
+    <mat-label>Category</mat-label>
+    <mat-select required  formControlName="category">
+      <ng-container *ngFor="let category of ( todoCategories | async)">
+        <mat-option [value]="category">{{category.name}}</mat-option>
+      </ng-container>
+    </mat-select>
+    <mat-error *ngIf="todoForm.controls.category.hasError('required')">
+      Category is <strong>required</strong>
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field class="form-field" appearance="fill">
+    <mat-label>Due Date</mat-label>
+    <input id="dueDate" required matInput type="datetime-local"  formControlName="due" min="{{dateTimeNow}}">
+    <mat-error *ngIf="todoForm.controls.due.hasError('required')">
+      Due Date and Time is <strong>required</strong>
+    </mat-error>
+  </mat-form-field>
+  .
+  <div>
+    <button type="submit" [disabled]="todoForm.invalid" mat-raised-button color="primary" style="margin-left: 5px"><mat-icon>save</mat-icon> Save</button>
+  </div>
+
+
+
+</form>
