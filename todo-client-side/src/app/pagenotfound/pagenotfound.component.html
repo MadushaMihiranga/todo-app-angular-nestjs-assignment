@@ -1,4 +1,17 @@
+<mat-toolbar>
+  <mat-icon>playlist_add_check</mat-icon>
+  <span>Todo List</span>
+  <span class="example-spacer"></span>
+
+</mat-toolbar>
+
 <div style="text-align: center;margin-top: 120px">
   <p style="font-size: 60px;margin: 5px">404</p>
   <p style="font-size: 40px;margin: 5px">Page Not Found</p>
+
+  <button (click)="redirectToLogin()" mat-raised-button color="primary" style="margin-top: 30px">
+    <mat-icon>keyboard_backspace</mat-icon>
+    Go back to the login page
+  </button>
+
 </div>
