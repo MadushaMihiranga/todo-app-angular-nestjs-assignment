@@ -2,56 +2,50 @@
 <div fxLayoutAlign="center center">
   <mat-card class="login-card">
     <mat-card-title class="login-title">Todo List: Login</mat-card-title>
-    <!--<mat-icon style="font-size: 45px">playlist_add_check</mat-icon>-->
     <mat-card-content>
-
-      <form class="login-form" (ngSubmit)="onSubmit()" #loginForm="ngForm" [formGroup]="newLoginForm">
+      <form class="login-form" (ngSubmit)="onSubmit()" #loginForm="ngForm" [formGroup]="todoLoginForm">
         <mat-form-field class="login-form-field" appearance="fill">
           <mat-label>Email</mat-label>
-          <input required type="email" matInput
-                 formControlName="username"
-                 [errorStateMatcher]="matcher"
-                 placeholder="Ex. example@gmail.com"
-                 [(ngModel)]="username"
-          >
-          <!--<mat-hint>Errors appear instantly!</mat-hint>-->
-          <mat-error *ngIf="newLoginForm.controls.username.hasError('email') && !newLoginForm.getError('required')">
+          <input
+            required type="email" matInput
+            formControlName="username"
+            placeholder="Ex. example@gmail.com">
+          <mat-error *ngIf="todoLoginForm.controls.username.hasError('email') && !todoLoginForm.getError('required')">
             Please enter a valid email address
           </mat-error>
-          <mat-error *ngIf="newLoginForm.controls.username.hasError('required')">
+          <mat-error *ngIf="todoLoginForm.controls.username.hasError('required')">
             Email is <strong>required</strong>
           </mat-error>
         </mat-form-field>
 
         <mat-form-field class="login-form-field" appearance="fill">
           <mat-label>Password</mat-label>
-          <input minlength="8" required matInput
-                 formControlName="password"
-                 [type]="passwordHidden ? 'password' : 'text'"
-                 [errorStateMatcher]="matcher"
-                 placeholder="Please Enter Your Password"
-                 [(ngModel)] = "password"
-                 autocomplete="false"
-          >
-          <button type="button" mat-icon-button matSuffix
-                  (click)="passwordHidden = !passwordHidden"
-                  [attr.aria-label]="'Hide password'"
-                  [attr.aria-pressed]="passwordHidden"
-          >
+          <input
+            minlength="8" required matInput
+            formControlName="password"
+            [type]="passwordHidden ? 'password' : 'text'"
+            placeholder="Please Enter Your Password"
+            autocomplete="false">
+          <button
+            type = "button" mat-icon-button matSuffix
+            (click)="passwordHidden = !passwordHidden"
+            [attr.aria-label]="'Hide password'"
+            [attr.aria-pressed]="passwordHidden">
             <mat-icon>{{passwordHidden ? 'visibility_off' : 'visibility'}}</mat-icon>
           </button>
 
-          <mat-error *ngIf="newLoginForm.controls.password.hasError('required')">
+          <mat-error *ngIf="todoLoginForm.controls.password.hasError('required')">
             Password is <strong>required</strong>
           </mat-error>
         </mat-form-field>
 
-        <button type="submit"
-                mat-raised-button color="primary"
-                class="login-button"
-
-        >LogIn</button><!-- (click)="validateUserCredentials()" -->
-        <mat-error style="margin-top: 10px" *ngIf="!credentialsValid">Invalid <strong>Login Credentials</strong></mat-error>
+        <button
+          type="submit"
+          mat-raised-button color="primary"
+          class="login-button">LogIn</button>
+        <mat-error style="margin-top: 10px" *ngIf="!credentialsValid">
+          Invalid <strong>Login Credentials</strong>
+        </mat-error>
       </form>
 
     </mat-card-content>
