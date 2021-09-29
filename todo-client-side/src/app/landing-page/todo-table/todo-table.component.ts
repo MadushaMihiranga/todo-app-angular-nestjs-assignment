@@ -1,9 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import {TodoData, TodoService} from "../../services/todo.service";
+import {TodoData, TodoService} from "../todo/todo.service";
 import {map, tap} from "rxjs/operators";
-import {Todo} from "../../entity/todo";
+import {Todo} from "../todo/entity/todo";
 import {PageEvent} from "@angular/material/paginator";
-import {Status} from "../../entity/status";
+import {Status} from "../todo/entity/status";
 import {HttpClient} from "@angular/common/http";
 import {SharedService} from "../../services/shared.service";
 import { Subscription} from "rxjs";
@@ -24,7 +24,6 @@ export class TodoTableComponent implements OnInit {
   dataSource!: TodoData;
   displayedColumns: string[] = ['id', 'title', 'description', 'due', 'Category', 'Status','Action'];
   pageEvent!: PageEvent;
-  ROOT_URL = 'http://localhost:1000';
   dueDate!: string;
   formSubmitEventSubscription!: Subscription;
   tableData!:Todo;
@@ -74,12 +73,13 @@ export class TodoTableComponent implements OnInit {
   }
 
   getTodoCategory(){
-    this.todoCategories = this.http.get(this.ROOT_URL+'/category')
+    this.todoCategories = this.todoService.getCategoryList();
   }
 
   getTodoStatuses(){
-    this.todoStatuses = this.http.get(this.ROOT_URL+'/status')
+    this.todoStatuses = this.todoService.getStatusList();
   }
+
 
   onPaginateEvent(event: PageEvent){
     let page = event.pageIndex+1;
@@ -105,12 +105,12 @@ export class TodoTableComponent implements OnInit {
   changeTodoStatus(data:Todo,status:Status){
     data.status = status;
     try {
-      this.http.patch(`${this.ROOT_URL}/todo/`+data.id,data).subscribe(
-        () => { this.sharedService.sendNotificationSuccessEvent();}
+      this.todoService.todoUpdate(data).subscribe(
+        () => {this.sharedService.sendNotificationSuccessEvent()}
       )
-    }catch (error){
+    }catch (e) {
       this.sharedService.sendNotificationErrorEvent();
-      console.log(error)
+      console.log(e)
     }
   }
 

@@ -1,10 +1,10 @@
 import {Component, OnInit, Output, EventEmitter, Input} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import { HttpClient } from "@angular/common/http";
 import {MatDialog} from "@angular/material/dialog";
 import {SharedService} from "../../../services/shared.service";
 import {TableService} from "../../../services/table.service";
 import * as moment from 'moment';
+import {TodoService} from "../../todo/todo.service";
 
 @Component({
   selector: 'app-todo-form',
@@ -13,15 +13,15 @@ import * as moment from 'moment';
 })
 export class TodoFormComponent implements OnInit {
 
-  ROOT_URL = 'http://localhost:1000';
+  //ROOT_URL = 'http://localhost:1000';
   //loading = false;
   //success = false;
   todoCategories!: any;
   dateTimeNow!: string;
 
   constructor(
+    private todoService: TodoService,
     private formBuilder: FormBuilder,
-    private http: HttpClient,
     public dialog: MatDialog,
     private sharedService:SharedService,
     private tableService: TableService
@@ -47,20 +47,18 @@ export class TodoFormComponent implements OnInit {
   }
 
   getTodoCategory(){
-    this.todoCategories = this.http.get(this.ROOT_URL+'/category')
+    this.todoCategories = this.todoService.getCategoryList();
   }
 
   async submit(){
-   // this.loading = true;
+    // this.loading = true;
     const formData = this.todoForm.value;
     try {
-      this.http.post(this.ROOT_URL+'/todo',formData).subscribe(() => {
-          this.tableService.sendFormSubmitSubject();
-          this.sharedService.sendNotificationSuccessEvent();
+      this.todoService.todoCreate(formData).subscribe(() => {
+        this.tableService.sendFormSubmitSubject();
+        this.sharedService.sendNotificationSuccessEvent();
       })
-      //this.success = true;
-    }catch (error){
-      //this.success = false;
+    }catch (e) {
       this.sharedService.sendNotificationErrorEvent();
     }
     this.dialog.closeAll()

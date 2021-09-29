@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import {TableDataService} from "../../../services/table-data.service";
-import {Todo} from "../../../entity/todo";
 import {MatDialog} from "@angular/material/dialog";
-import {HttpClient} from "@angular/common/http";
 import {SharedService} from "../../../services/shared.service";
 import {TableService} from "../../../services/table.service";
+import {TodoService} from "../../todo/todo.service";
+import {Todo} from "../../todo/entity/todo";
 
 @Component({
   selector: 'app-todo-delete-confirmation-content',
@@ -14,15 +14,14 @@ import {TableService} from "../../../services/table.service";
 export class TodoDeleteConfirmationContentComponent implements OnInit {
 
   dataToBeDelete!: Todo;
-  ROOT_URL = 'http://localhost:1000';
 
   constructor(
+    private todoService: TodoService,
     private tableDataService: TableDataService,
     public dialog: MatDialog,
-    private http: HttpClient,
     private sharedService:SharedService,
     private tableService: TableService,
-    ) { }
+  ) { }
 
   ngOnInit(): void {
     this.tableDataService.currentValue.subscribe(dataToBeDelete => this.dataToBeDelete = dataToBeDelete);
@@ -30,14 +29,15 @@ export class TodoDeleteConfirmationContentComponent implements OnInit {
 
   submitDelete(){
     try {
-      this.http.delete(`${this.ROOT_URL}/todo/${this.dataToBeDelete.id}`).subscribe(()=>{
+      this.todoService.todoDelete(this.dataToBeDelete).subscribe(() => {
         this.tableService.sendFormSubmitSubject();
         this.sharedService.sendNotificationSuccessEvent();
-      })
-    }catch (error){
+      } )
+    }catch (e) {
+      console.log(e)
       this.sharedService.sendNotificationErrorEvent();
     }
-    this.dialog.closeAll();
+    this.dialog.closeAll()
   }
 
   closeDeleteConfirmation(){
