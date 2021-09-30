@@ -1,18 +1,25 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import {TodoData, TodoService} from "../todo/todo.service";
-import {map, tap} from "rxjs/operators";
-import {Todo} from "../todo/entity/todo";
+import {TodoData, TodoService} from "../../app_state/services/todo.service";
+import {map, takeUntil, tap} from "rxjs/operators";
+import {Todo} from "../../app_state/entity/todo";
 import {PageEvent} from "@angular/material/paginator";
-import {Status} from "../todo/entity/status";
+import {Status} from "../../app_state/entity/status";
 import {HttpClient} from "@angular/common/http";
 import {SharedService} from "../../services/shared.service";
-import { Subscription} from "rxjs";
+import {Observable, Subject, Subscription} from "rxjs";
 import * as moment from 'moment';
 import {TableService} from "../../services/table.service";
 import {TableDataService} from "../../services/table-data.service";
 import {UpdateFormService} from "../../services/update-form.service";
 import {TodoDeleteConfirmationService} from "../../services/todo-delete-confirmation.service";
+//ngrx
+import { Store } from '@ngrx/store';
+import * as fromRoot from "../../app_state";
+import {User} from "../../app_state/entity/user";
+import {Category} from "../../app_state/entity/category";
 //import {MatSort} from "@angular/material/sort";
+
+
 
 @Component({
   selector: 'app-todo-table',
@@ -24,11 +31,15 @@ export class TodoTableComponent implements OnInit {
   dataSource!: TodoData;
   displayedColumns: string[] = ['id', 'title', 'description', 'due', 'Category', 'Status','Action'];
   pageEvent!: PageEvent;
-  dueDate!: string;
   formSubmitEventSubscription!: Subscription;
   tableData!:Todo;
-  todoCategories!: any;
-  todoStatuses!: any;
+  categoryList$: any;
+  statusList$: any;
+  user!: User;
+  loading = false;
+
+
+  destroy$: Subject<boolean> = new Subject<boolean>();
 
   searchValueTitle: string = '';
   searchValueCategoryID: string = '';
@@ -38,30 +49,36 @@ export class TodoTableComponent implements OnInit {
 
   constructor(
     private todoService: TodoService,
-    private http: HttpClient,
     private sharedService:SharedService,
     private tableService:TableService,
     private tableDataService: TableDataService,
     private updateFormService: UpdateFormService,
     private todoDeleteConfirmationService: TodoDeleteConfirmationService,
+    private readonly store: Store
     ) {
-    this.formSubmitEventSubscription = this.tableService.getFormSubmitSubject().subscribe(() => {
-      this.findAll();
-    });
+    this.formSubmitEventSubscription = this.tableService.getFormSubmitSubject()
+      .subscribe(() => {this.findAll()});
+    this.store.select(fromRoot.getLoggedInUser)
+      .pipe(takeUntil(this.destroy$),)
+      .subscribe(data => this.user = data.user);
+    this.store.select(fromRoot.getStatusList)
+      .pipe(takeUntil(this.destroy$),)
+      .subscribe(data => this.statusList$ = data.statusList);
+    this.store.select(fromRoot.getCategoryList)
+      .pipe(takeUntil(this.destroy$),)
+      .subscribe(data => this.categoryList$ = data.categoryList);
   }
 
   ngOnInit(): void {
     this.findAll();
     this.tableDataService.currentValue.subscribe(tableData => this.tableData = tableData);
-    this.getTodoCategory();
-    this.getTodoStatuses();
   }
 
-  findAll(){
+   findAll(){
     this.todoService.findAll(
       1,
       10,
-      localStorage.getItem('username')!,
+      this.user.username!,
       this.searchValueTitle,
       this.searchValueStatusID,
       this.searchValueCategoryID,
@@ -69,17 +86,8 @@ export class TodoTableComponent implements OnInit {
       this.searchValueTo
       ).pipe(
       map((todoData: TodoData) => this.dataSource = todoData)
-    ).subscribe()
+    ).subscribe();
   }
-
-  getTodoCategory(){
-    this.todoCategories = this.todoService.getCategoryList();
-  }
-
-  getTodoStatuses(){
-    this.todoStatuses = this.todoService.getStatusList();
-  }
-
 
   onPaginateEvent(event: PageEvent){
     let page = event.pageIndex+1;
@@ -87,7 +95,7 @@ export class TodoTableComponent implements OnInit {
     this.todoService.findAll(
       page,
       size,
-      localStorage.getItem('username')!,
+      this.user.username!,
       this.searchValueTitle,
       this.searchValueStatusID,
       this.searchValueCategoryID,
@@ -105,12 +113,10 @@ export class TodoTableComponent implements OnInit {
   changeTodoStatus(data:Todo,status:Status){
     data.status = status;
     try {
-      this.todoService.todoUpdate(data).subscribe(
-        () => {this.sharedService.sendNotificationSuccessEvent()}
-      )
+      this.todoService.todoUpdate(data)
+        .subscribe(() => {this.sharedService.sendNotificationSuccessEvent()})
     }catch (e) {
       this.sharedService.sendNotificationErrorEvent();
-      console.log(e)
     }
   }
 

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {BehaviorSubject} from "rxjs";
-import {Todo} from "../landing-page/todo/entity/todo";
+import {Todo} from "../app_state/entity/todo";
 
 @Injectable({
   providedIn: 'root'

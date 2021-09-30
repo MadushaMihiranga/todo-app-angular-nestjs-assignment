@@ -76,6 +76,7 @@ __decorate([
 __decorate([
     (0, swagger_1.ApiCreatedResponse)({ type: todo_entity_1.Todo }),
     (0, common_1.Post)(),
+    (0, common_1.UsePipes)(new common_1.ValidationPipe({ transform: true })),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [create_todo_dto_1.CreateTodoDto]),
@@ -83,6 +84,7 @@ __decorate([
 ], TodoController.prototype, "create", null);
 __decorate([
     (0, common_1.Patch)(':id'),
+    (0, common_1.UsePipes)(new common_1.ValidationPipe({ transform: true })),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -97,7 +99,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], TodoController.prototype, "remove", null);
 TodoController = __decorate([
-    (0, swagger_1.ApiTags)('Todo List'),
+    (0, swagger_1.ApiTags)('Todo'),
     (0, common_1.Controller)('todo'),
     __metadata("design:paramtypes", [todo_service_1.TodoService])
 ], TodoController);

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {Todo} from "../../todo/entity/todo";
+import {Todo} from "../../../app_state/entity/todo";
 import {TableDataService} from "../../../services/table-data.service";
 import * as moment from 'moment';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";

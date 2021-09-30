@@ -7,6 +7,7 @@ import { Connection } from 'typeorm';
 import { StatusModule } from './status/status.module';
 import { CategoryModule } from './category/category.module';
 import config from '../ormconfig';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import config from '../ormconfig';
     TodoModule,
     StatusModule,
     CategoryModule,
+      UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],

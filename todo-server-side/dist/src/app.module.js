@@ -19,6 +19,7 @@ const typeorm_2 = require("typeorm");
 const status_module_1 = require("./status/status.module");
 const category_module_1 = require("./category/category.module");
 const ormconfig_1 = require("../ormconfig");
+const users_module_1 = require("./users/users.module");
 let AppModule = class AppModule {
     constructor(connection) {
         this.connection = connection;
@@ -31,6 +32,7 @@ AppModule = __decorate([
             todo_module_1.TodoModule,
             status_module_1.StatusModule,
             category_module_1.CategoryModule,
+            users_module_1.UsersModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],

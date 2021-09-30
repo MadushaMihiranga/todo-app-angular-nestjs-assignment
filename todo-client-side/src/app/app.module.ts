@@ -40,6 +40,16 @@ import { TodoUpdateDuedateComponent } from './landing-page/todo-update-duedate/t
 import { TodoUpdateDuedateFormComponent } from './landing-page/todo-update-duedate/todo-update-duedate-form/todo-update-duedate-form.component';
 import {TodoDeleteConfirmationComponent} from './landing-page/todo-delete-confirmation/todo-delete-confirmation.component';
 import { TodoDeleteConfirmationContentComponent } from './landing-page/todo-delete-confirmation/todo-delete-confirmation-content/todo-delete-confirmation-content.component';
+import {StoreModule} from "@ngrx/store";
+import {EffectsModule} from "@ngrx/effects";
+
+
+//ngrx
+import { reducers, metaReducers } from '../app/app_state/index';
+import {UserEffects} from "./app_state/effects/user.effects";
+import {TodoEffects} from "./app_state/effects/todo.effects";
+import {StoreDevtoolsModule} from "@ngrx/store-devtools";
+
 
 @NgModule({
   declarations: [
@@ -83,7 +93,11 @@ import { TodoDeleteConfirmationContentComponent } from './landing-page/todo-dele
         MatGridListModule,
         MatMenuModule,
         MatSnackBarModule,
-        MatProgressSpinnerModule
+        MatProgressSpinnerModule,
+      //ngrx
+      StoreModule.forRoot(reducers, {metaReducers}),
+      EffectsModule.forRoot([UserEffects, TodoEffects]),
+      StoreDevtoolsModule.instrument({name: 'Todo App'})
     ],
   providers: [],
   bootstrap: [AppComponent]

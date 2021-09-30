@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {Observable, throwError} from "rxjs";
 import {catchError, map, tap} from "rxjs/operators";
-import { Category } from './entity/category';
-import {Status} from "./entity/status";
-import { Todo } from './entity/todo';
+import { Category } from '../entity/category';
+import {Status} from "../entity/status";
+import { Todo } from '../entity/todo';
 
 export interface  TodoData{
   items: Todo[],
@@ -52,6 +52,7 @@ export class TodoService {
   }
 
   getCategoryList(): Observable<Category[]>{
+    //console.log('category service')
     return this.http.get<Category[]>(this.ROOT_URL+'/category');
   }
 

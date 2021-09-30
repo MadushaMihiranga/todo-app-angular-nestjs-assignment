@@ -1,4 +1,10 @@
 
+<!--
+<mat-spinner *ngIf="loading"></mat-spinner>
+-->
+
+
+
 <mat-form-field style="margin: 15px;width: 200px">
   <mat-label>Search Tasks By Title</mat-label>
   <input matInput type="text" [(ngModel)] = "searchValueTitle"  (input)="findAll()">
@@ -7,8 +13,8 @@
 <mat-form-field style="margin: 15px">
   <mat-label>Search By Category</mat-label>
   <mat-select [(value)]="searchValueCategoryID" (valueChange) = "findAll()">
-    <ng-container *ngFor="let category of ( todoCategories | async)">
-      <mat-option [value]="category.id">{{category.name}}</mat-option>
+    <ng-container *ngFor="let category of ( categoryList$ )">
+      <mat-option [value]="category.id">{{category.name  }}</mat-option>
     </ng-container>
   </mat-select>
 </mat-form-field>
@@ -16,7 +22,7 @@
 <mat-form-field style="margin: 15px">
   <mat-label>Search By Status</mat-label>
   <mat-select [(value)]="searchValueStatusID" (valueChange) ="findAll()">
-    <ng-container *ngFor="let status of ( todoStatuses | async)">
+    <ng-container *ngFor="let status of ( statusList$ )">
       <mat-option [value]="status.id">{{status.name}}</mat-option>
     </ng-container>
   </mat-select>

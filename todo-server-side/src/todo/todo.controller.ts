@@ -9,7 +9,7 @@ import {
   Query,
   DefaultValuePipe,
   ParseIntPipe,
-  HttpException,
+  HttpException, UsePipes, ValidationPipe,
 } from '@nestjs/common';
 import {
   ApiCreatedResponse,
@@ -25,7 +25,7 @@ import { Todo } from './entities/todo.entity';
 import { Pagination } from 'nestjs-typeorm-paginate';
 import { PaginationTodoDto } from './dto/pagination-todo-dto';
 
-@ApiTags('Todo List')
+@ApiTags('Todo')
 @Controller('todo')
 export class TodoController {
   constructor(private readonly todoService: TodoService) {}
@@ -71,11 +71,14 @@ export class TodoController {
 
   @ApiCreatedResponse({ type: Todo })
   @Post()
+  @UsePipes(new ValidationPipe({ transform: true }))
   create(@Body() createTodoDto: CreateTodoDto): Promise<Todo> {
     return this.todoService.create(createTodoDto);
   }
 
+
   @Patch(':id')
+  @UsePipes(new ValidationPipe({ transform: true }))
   update(
     @Param('id') id: string,
     @Body() updateTodoDto: UpdateTodoDto,

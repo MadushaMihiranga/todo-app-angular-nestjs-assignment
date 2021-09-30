@@ -4,7 +4,12 @@ import {MatDialog} from "@angular/material/dialog";
 import {SharedService} from "../../../services/shared.service";
 import {TableService} from "../../../services/table.service";
 import * as moment from 'moment';
-import {TodoService} from "../../todo/todo.service";
+import {TodoService} from "../../../app_state/services/todo.service";
+import {Store} from "@ngrx/store";
+import * as fromRoot from "../../../app_state";
+import {takeUntil} from "rxjs/operators";
+import {Subject} from "rxjs";
+import {User} from "../../../app_state/entity/user";
 
 @Component({
   selector: 'app-todo-form',
@@ -13,19 +18,27 @@ import {TodoService} from "../../todo/todo.service";
 })
 export class TodoFormComponent implements OnInit {
 
-  //ROOT_URL = 'http://localhost:1000';
-  //loading = false;
-  //success = false;
-  todoCategories!: any;
+  categoryList$!: any;
   dateTimeNow!: string;
+  destroy$: Subject<boolean> = new Subject<boolean>();
+  user!: User;
 
   constructor(
     private todoService: TodoService,
     private formBuilder: FormBuilder,
     public dialog: MatDialog,
     private sharedService:SharedService,
-    private tableService: TableService
-  ) {}
+    private tableService: TableService,
+    private readonly store: Store
+  ) {
+    this.store.select(fromRoot.getCategoryList)
+      .pipe(takeUntil(this.destroy$),)
+      .subscribe(data => this.categoryList$ = data.categoryList);
+
+    this.store.select(fromRoot.getLoggedInUser)
+      .pipe(takeUntil(this.destroy$),)
+      .subscribe(data => this.user = data.user);
+  }
 
   todoForm = new FormGroup({
     title: new FormControl(null,[Validators.maxLength(25),Validators.required]),
@@ -41,17 +54,12 @@ export class TodoFormComponent implements OnInit {
       description : '',
       due : '',
       category : '',
-      email: localStorage.getItem('username')
+      email: this.user.username
     });
-    this.getTodoCategory();
-  }
-
-  getTodoCategory(){
-    this.todoCategories = this.todoService.getCategoryList();
+    console.log(this.user.username)
   }
 
   async submit(){
-    // this.loading = true;
     const formData = this.todoForm.value;
     try {
       this.todoService.todoCreate(formData).subscribe(() => {

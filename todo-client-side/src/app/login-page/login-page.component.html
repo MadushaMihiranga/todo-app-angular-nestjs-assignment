@@ -1,10 +1,10 @@
 
 <div fxLayoutAlign="center center">
-  <mat-card class="login-card">
+  <mat-card class="login-card" style="padding: 40px 30px;">
     <mat-card-title class="login-title">Todo List: Login</mat-card-title>
     <mat-card-content>
       <form class="login-form" (ngSubmit)="onSubmit()" #loginForm="ngForm" [formGroup]="todoLoginForm">
-        <mat-form-field class="login-form-field" appearance="fill">
+        <mat-form-field class="login-form-field" appearance="outline">
           <mat-label>Email</mat-label>
           <input
             required type="email" matInput
@@ -18,7 +18,7 @@
           </mat-error>
         </mat-form-field>
 
-        <mat-form-field class="login-form-field" appearance="fill">
+        <mat-form-field class="login-form-field" appearance="outline">
           <mat-label>Password</mat-label>
           <input
             minlength="8" required matInput
@@ -46,6 +46,10 @@
         <mat-error style="margin-top: 10px" *ngIf="!credentialsValid">
           Invalid <strong>Login Credentials</strong>
         </mat-error>
+
+
+
+
       </form>
 
     </mat-card-content>
@@ -54,3 +58,5 @@
     </mat-card-actions>
   </mat-card>
 </div>
+
+

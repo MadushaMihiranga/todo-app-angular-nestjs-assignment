@@ -3,8 +3,8 @@ import {TableDataService} from "../../../services/table-data.service";
 import {MatDialog} from "@angular/material/dialog";
 import {SharedService} from "../../../services/shared.service";
 import {TableService} from "../../../services/table.service";
-import {TodoService} from "../../todo/todo.service";
-import {Todo} from "../../todo/entity/todo";
+import {TodoService} from "../../../app_state/services/todo.service";
+import {Todo} from "../../../app_state/entity/todo";
 
 @Component({
   selector: 'app-todo-delete-confirmation-content',
